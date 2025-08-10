@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Robot Camera System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .option-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .option-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .option-card p {
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        .features {
+            font-size: 0.9rem;
+            margin-top: 10px;
+            opacity: 0.7;
+        }
+
+        .recommended {
+            border: 2px solid #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .recommended::before {
+            content: "⭐ RECOMMENDED";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00ff88;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .recommended {
+            position: relative;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .option-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Robot Camera System</h1>
+        <p class="subtitle">Choose your camera interface</p>
+
+        <a href="/camera_browser.html" class="option-card recommended">
+            <h3>🎯 Advanced Camera with AI</h3>
+            <p>Full-featured camera with face tracking, distance estimation, and real-time controls</p>
+            <div class="features">
+                ✨ Face detection & tracking<br>
+                📏 Distance estimation<br>
+                🎨 Video filters & effects<br>
+                📊 Live analytics
+            </div>
+        </a>
+
+        <a href="/camera_browser_simple.html" class="option-card">
+            <h3>⚡ Simple Camera</h3>
+            <p>Lightweight camera with basic motion detection and face recognition</p>
+            <div class="features">
+                🔍 Motion detection<br>
+                👤 Basic face detection<br>
+                📏 Distance estimation<br>
+                🚀 Fast performance
+            </div>
+        </a>
+
+        <div style="margin-top: 30px; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; font-size: 0.9rem;">
+            <strong>💡 Quick Guide:</strong><br>
+            • Click "Start Camera" to begin<br>
+            • Enable "Face Tracking" for AI features<br>
+            • Use "Calibrate Distance" for accurate measurements<br>
+            • Try fullscreen mode for immersive experience
+        </div>
+    </div>
+
+    <script>
+        // Auto-redirect to advanced version after 10 seconds if no choice made
+        let countdown = 10;
+        const redirectTimer = setInterval(() => {
+            countdown--;
+            if (countdown <= 0) {
+                window.location.href = '/camera_browser.html';
+                clearInterval(redirectTimer);
+            }
+        }, 1000);
+
+        // Clear timer if user clicks any option
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', () => {
+                clearInterval(redirectTimer);
+            });
+        });
+    </script>
+</body>
+</html>
