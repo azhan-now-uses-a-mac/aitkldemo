@@ -276,7 +276,6 @@
             <button id="trackingBtn">🎯 Start Tracking</button>
             <button id="followingBtn">🤖 Start Following</button>
             <button id="calibrateBtn">📏 Calibrate Distance</button>
-            <button id="voiceBtn">🎤 Voice Control</button>
             <button id="resetBtn">🔄 Reset</button>
         </div>
 
@@ -338,11 +337,6 @@
                 this.websocket = null;
                 this.robotConnected = false;
                 
-                // Voice control
-                this.voiceActive = false;
-                this.recognition = null;
-                this.audioContext = null;
-                
                 this.initializeControls();
                 this.initializeSettings();
                 this.initializeRobotConnection();
@@ -354,7 +348,6 @@
                 document.getElementById('trackingBtn').addEventListener('click', () => this.toggleTracking());
                 document.getElementById('followingBtn').addEventListener('click', () => this.toggleFollowing());
                 document.getElementById('calibrateBtn').addEventListener('click', () => this.calibrateDistance());
-                document.getElementById('voiceBtn').addEventListener('click', () => this.toggleVoiceControl());
                 document.getElementById('resetBtn').addEventListener('click', () => this.reset());
             }
 
@@ -980,187 +973,6 @@
                             L: ${leftSpeed}, R: ${rightSpeed}
                         </div>
                     `;
-                }
-            }
-
-            toggleVoiceControl() {
-                this.voiceActive = !this.voiceActive;
-                const voiceBtn = document.getElementById('voiceBtn');
-                
-                if (this.voiceActive) {
-                    voiceBtn.classList.add('active');
-                    voiceBtn.textContent = '🎤 Stop Voice';
-                    this.startVoiceRecognition();
-                    this.updateStatus('🎤 Voice control active - speak to me!', 'success');
-                } else {
-                    voiceBtn.classList.remove('active');
-                    voiceBtn.textContent = '🎤 Voice Control';
-                    this.stopVoiceRecognition();
-                    this.updateStatus('🎤 Voice control disabled', 'status');
-                }
-            }
-            
-            startVoiceRecognition() {
-                try {
-                    // Initialize speech recognition
-                    if ('webkitSpeechRecognition' in window) {
-                        this.recognition = new webkitSpeechRecognition();
-                        console.log('🎤 Using webkitSpeechRecognition');
-                    } else if ('SpeechRecognition' in window) {
-                        this.recognition = new SpeechRecognition();
-                        console.log('🎤 Using SpeechRecognition');
-                    } else {
-                        this.updateStatus('❌ Speech recognition not supported in this browser', 'error');
-                        alert('Speech recognition not supported. Try using Chrome browser.');
-                        return;
-                    }
-                    
-                    // Configure recognition
-                    this.recognition.continuous = false; // Changed to false for better reliability
-                    this.recognition.interimResults = false;
-                    this.recognition.lang = 'en-US';
-                    this.recognition.maxAlternatives = 1;
-                    
-                    this.recognition.onstart = () => {
-                        console.log('🎤 Voice recognition started - speak now!');
-                        this.updateStatus('🎤 Listening... speak now!', 'success');
-                    };
-                    
-                    this.recognition.onresult = (event) => {
-                        const transcript = event.results[0][0].transcript.trim();
-                        const confidence = event.results[0][0].confidence;
-                        console.log(`🎤 Heard: "${transcript}" (confidence: ${confidence})`);
-                        this.updateStatus(`🎤 Heard: "${transcript}"`, 'warning');
-                        this.processVoiceCommand(transcript);
-                    };
-                    
-                    this.recognition.onerror = (event) => {
-                        console.error('🚨 Speech recognition error:', event.error);
-                        if (event.error === 'not-allowed') {
-                            this.updateStatus('❌ Microphone permission denied. Allow microphone access and try again.', 'error');
-                            alert('Please allow microphone access and try again!');
-                        } else if (event.error === 'no-speech') {
-                            this.updateStatus('🎤 No speech detected. Try again.', 'warning');
-                        } else {
-                            this.updateStatus(`❌ Speech error: ${event.error}`, 'error');
-                        }
-                    };
-                    
-                    this.recognition.onend = () => {
-                        console.log('🎤 Voice recognition ended');
-                        if (this.voiceActive) {
-                            // Restart recognition automatically after 1 second
-                            setTimeout(() => {
-                                if (this.voiceActive) {
-                                    console.log('🔄 Restarting voice recognition...');
-                                    this.recognition.start();
-                                }
-                            }, 1000);
-                        }
-                    };
-                    
-                    // Start recognition
-                    this.recognition.start();
-                    console.log('🎤 Voice recognition initialized and started');
-                    
-                } catch (error) {
-                    console.error('❌ Voice recognition setup error:', error);
-                    this.updateStatus('❌ Voice recognition setup failed: ' + error.message, 'error');
-                }
-            }
-            
-            stopVoiceRecognition() {
-                if (this.recognition) {
-                    this.recognition.stop();
-                    this.recognition = null;
-                }
-            }
-            
-            async processVoiceCommand(text) {
-                try {
-                    console.log(`🎯 Processing: "${text}"`);
-                    this.updateStatus(`🎤 Processing: "${text}"`, 'warning');
-                    
-                    // Send to voice AI server
-                    const serverIP = window.location.hostname;
-                    const response = await fetch(`http://${serverIP}:8083/voice/process`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ text: text })
-                    });
-                    
-                    if (response.ok) {
-                        const result = await response.json();
-                        console.log('🤖 Voice AI response:', result);
-                        
-                        // Speak the response
-                        await this.speakResponse(result.response_text);
-                        
-                        // Handle special actions
-                        if (result.robot_action === 'start_following') {
-                            if (!this.followingActive) this.toggleFollowing();
-                        } else if (result.robot_action === 'stop_following') {
-                            if (this.followingActive) this.toggleFollowing();
-                        }
-                        
-                        this.updateStatus(`🤖 ${result.response_text}`, 'success');
-                        
-                    } else {
-                        this.updateStatus('❌ Voice command failed', 'error');
-                    }
-                    
-                } catch (error) {
-                    console.error('Voice command error:', error);
-                    this.updateStatus('❌ Voice processing error', 'error');
-                }
-            }
-            
-            async speakResponse(text) {
-                try {
-                    // Try ElevenLabs first
-                    const serverIP = window.location.hostname;
-                    const response = await fetch(`http://${serverIP}:8083/voice/speak`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ text: text })
-                    });
-                    
-                    if (response.ok) {
-                        const audioBlob = await response.blob();
-                        if (audioBlob.size > 0) {
-                            const audioUrl = URL.createObjectURL(audioBlob);
-                            const audio = new Audio(audioUrl);
-                            audio.play();
-                            console.log(`🔊 ElevenLabs speaking: "${text}"`);
-                            return;
-                        }
-                    }
-                } catch (error) {
-                    console.log('ElevenLabs failed, using browser TTS:', error);
-                }
-                
-                // Fallback to browser speech synthesis
-                try {
-                    if ('speechSynthesis' in window) {
-                        const utterance = new SpeechSynthesisUtterance(text);
-                        utterance.rate = 0.9;
-                        utterance.pitch = 1.0;
-                        utterance.volume = 1.0;
-                        
-                        // Try to use a good voice
-                        const voices = speechSynthesis.getVoices();
-                        const goodVoice = voices.find(voice => 
-                            voice.name.includes('Samantha') || 
-                            voice.name.includes('Alex') || 
-                            voice.name.includes('Google')
-                        );
-                        if (goodVoice) utterance.voice = goodVoice;
-                        
-                        speechSynthesis.speak(utterance);
-                        console.log(`🔊 Browser TTS speaking: "${text}"`);
-                    }
-                } catch (error) {
-                    console.error('All speech synthesis failed:', error);
                 }
             }
 

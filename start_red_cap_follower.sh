@@ -75,11 +75,6 @@ cleanup() {
         echo "🤖 Robot controller stopped"
     fi
     
-    if [ ! -z "$VOICE_AI_PID" ]; then
-        kill $VOICE_AI_PID 2>/dev/null
-        echo "🎤 Voice AI server stopped"
-    fi
-    
     # Stop robot movement
     echo "🛑 Stopping robot movement..."
     adb shell "su -c 'cd /data/data/com.ohmnilabs.telebot_rtc/files/assets/node-files && (echo \"rot 0 0\"; echo \"rot 1 0\") | ./node bot_shell_client.js'" > /dev/null 2>&1
@@ -106,23 +101,6 @@ if ! kill -0 $ROBOT_CONTROLLER_PID 2>/dev/null; then
 fi
 
 echo "✅ Robot HTTP controller started (PID: $ROBOT_CONTROLLER_PID)"
-
-# Start simple voice server in background
-echo "🎤 Starting simple voice server..."
-python3 simple_voice_server.py &
-VOICE_AI_PID=$!
-
-# Wait for voice AI server to start
-sleep 2
-
-# Check if voice AI server is running
-if ! kill -0 $VOICE_AI_PID 2>/dev/null; then
-    echo "❌ Failed to start voice AI server"
-    cleanup
-    exit 1
-fi
-
-echo "✅ Voice AI server started (PID: $VOICE_AI_PID)"
 
 # Start camera server in background
 echo "🌐 Starting camera server..."
@@ -175,7 +153,6 @@ echo "=================================="
 echo "📱 The Red Cap Follower should now be opening on the robot's screen"
 echo "🌐 Follower URL: $FOLLOWER_URL"
 echo "🤖 Robot Controller: http://localhost:8081"
-echo "🎤 Voice AI Server: http://localhost:8083"
 echo ""
 echo "📋 Instructions:"
 echo "  1. Put on your red cap/hat"
@@ -184,22 +161,12 @@ echo "  3. Click 'Start Tracking' to detect red objects"
 echo "  4. Adjust red sensitivity if needed"
 echo "  5. Click 'Calibrate Distance' when at your desired follow distance"
 echo "  6. Click 'Start Following' to make the robot follow you!"
-echo "  7. Click 'Voice Control' to talk to the robot!"
 echo ""
 echo "⚠️  Safety Notes:"
 echo "  • Keep clear space around the robot"
 echo "  • Robot will follow at the configured distance"
 echo "  • Stay visible to the camera"
 echo "  • Click 'Stop Following' to stop"
-echo ""
-echo "🎤 Voice Commands:"
-echo "  • 'Move forward' or 'Go ahead'"
-echo "  • 'Move backward' or 'Go back'"
-echo "  • 'Turn left' or 'Go left'"
-echo "  • 'Turn right' or 'Go right'"
-echo "  • 'Stop' or 'Halt'"
-echo "  • 'Follow me' (starts red cap following)"
-echo "  • 'Stop following' (disables following)"
 echo ""
 echo "🔧 If the browser didn't open automatically on the robot:"
 echo "  1. Open a browser on the robot manually"
