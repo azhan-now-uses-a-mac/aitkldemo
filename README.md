@@ -1,24 +1,24 @@
-# 🤖 Mizo OS - Your Personal AI Assistant Robot
+# Mizo OS - Your Personal AI Assistant Robot
 
 Hey there! to who ever is readign this and s intrested in building upon this project, I wish you the best. I'm Azhan, and this is **Mizo OS**  my attempt at creating the ultimate personal assistant robot that can follow you around and be genuinely useful such as send emails or make task lists all while jsut beign a robot around you using AI and vision technology.
 
-## 🎯 The Big Picture
+## The Big Picture
 
 The whole idea behind Mizo OS is simple: I want a robot that works as a **personal assistant** using MCP (Model Context Protocol) to move around and be your own AI companion. Think of it as having your own R2-D2 that can follow you around, understand what you need, and actually help you out using cutting-edge AI and vision tech and keeps learning as it goes aroudn the person.
 
 This isn't just another tech demo, I was wanting to  build something that could genuinely change how we interact with AI assistants by making them physical, mobile, and contextually aware of their environment. 
 
-## 🚀 What's Inside
+## What's Inside
 
 This repo contains two main ways to control your robot:
 
-### 1. 🎮 Interactive Manual Control (`interactive_control.sh`)
+### 1. Interactive Manual Control (`interactive_control.sh`)
 Direct, real-time keyboard control of your robot - perfect for testing, manual navigation, or just having fun.
 
-### 2. 🔴 Red Cap Follower (`start_red_cap_follower.sh`) 
+### 2. Red Cap Follower (`start_red_cap_follower.sh`) 
 An AI-powered vision system that tracks red objects (like a red cap) and makes the robot follow you around autonomously. This is the semi-developed autonomous following system I'm working on.
 
-## 🛠️ Setup & Requirements
+## Setup & Requirements
 
 ### What You Need:
 - An Ohmni robot (or compatible robot with similar control interface)
@@ -46,7 +46,7 @@ An AI-powered vision system that tracks red objects (like a red cap) and makes t
    ```
    You should see your robot listed.
 
-## 🎮 Interactive Control Mode
+## Interactive Control Mode
 
 Want to drive the robot around manually? This is your go-to:
 
@@ -72,12 +72,12 @@ Want to drive the robot around manually? This is your go-to:
 
 **Safety First:** Always keep your finger near 'q' to stop the robot immediately if needed!
 
-## 🔴 Red Cap Follower (Autonomous Mode)
+## Red Cap Follower (Autonomous Mode)
 
 This is where the magic happens  AI-powered autonomous following:
 
 ```bash
-cd /Users/azhan/Pictures/Mizo_Main && chmod +x start_red_cap_follower.sh && ./start_red_cap_follower.sh
+chmod +x start_red_cap_follower.sh && ./start_red_cap_follower.sh
 ```
 
 ### What This Does:
@@ -104,7 +104,7 @@ cd /Users/azhan/Pictures/Mizo_Main && chmod +x start_red_cap_follower.sh && ./st
 - **Web-based interface** that runs on the robot's screen
 - **Adjustable sensitivity** for different lighting conditions
 
-## ⚠️ Safety Notes
+## Safety Notes
 
 - **Always have clear space** around the robot
 - **Stay visible** to the camera when using follower mode
@@ -112,7 +112,7 @@ cd /Users/azhan/Pictures/Mizo_Main && chmod +x start_red_cap_follower.sh && ./st
 - **Test in a safe area** first before using in crowded spaces
 - The robot will try to maintain your configured distance but **keep an eye on it**
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Robot Won't Connect?
 - Make sure both devices are on the same WiFi network
@@ -131,26 +131,26 @@ cd /Users/azhan/Pictures/Mizo_Main && chmod +x start_red_cap_follower.sh && ./st
 - Make sure your red object is large enough to be detected
 - Try recalibrating the distance
 
-## 🚧 Current Status
+## Current Status
 
 This is very much a **work in progress**! The red cap follower is semi-developed and I was constantly improving it (Didn't work as inteded ). Some things might be rough around the edges, but the core functionality works.I am lowkey proud of the fact that I have never touched a robot but I got this thing that was build on 2018 with no manual or guide to anything and no support to it at all.
 
 ### What's Working:
-✅ Manual robot control  
-✅ Red object detection and tracking  
-✅ Distance-based following  
-✅ Web interface for controls  
-✅ Real-time video processing  
+- Manual robot control  
+- Red object detection and tracking  
+- Distance-based following  
+- Web interface for controls  
+- Real-time video processing  
 
 ### What want to work on (if we get funding):
-🔄 Better object tracking algorithms  
-🔄 Voice command integration  
-🔄 More robust following behavior  
-🔄 Integration with more AI models  
-🔄 Better error handling  
+- Better object tracking algorithms  
+- Voice command integration  
+- More robust following behavior  
+- Integration with more AI models  
+- Better error handling  
 
 
-## 🧠 AI Integration Plans
+## AI Integration Plans
 
 was working on integrating proper AI capabilities to make this robot truly intelligent, How ever it wasnt able to be shown on the presentation nor am I shraing it to the repo since it doesn't function as intended. 
 
@@ -174,7 +174,7 @@ I'm also advice on making the robot movement smarter by adding more logic to the
 
 Since the whole system runs on bash scripts, there's tons of room to keep adding logic and making the movements more natural and intelligent.
 
-## 💭 The Vision
+## The Vision
 
 Ultimately, I want Mizo OS to be the foundation for truly intelligent, mobile AI assistants. Imagine having a robot that can:
 - Follow you around your house or office
@@ -189,11 +189,11 @@ The combination of vision tracking, AI conversation, and intelligent movement co
 
 We're not there yet, but every bash script improvement and AI integration gets us closer to that future.
 
-## 🔧 System Architecture & How Everything Connects
+## System Architecture & How Everything Connects
 
 Understanding how all the pieces work together is crucial for debugging and extending Mizo OS. Here's the complete breakdown:
 
-### 📊 System Flow Diagram
+### System Flow Diagram
 
 ```mermaid
 graph TB
